@@ -2,169 +2,175 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>逐字稿 · 抖音逐字稿库</title><style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#f5f6f8;--card:#fff;--line:#e5e7eb;--txt:#1f2328;--dim:#6b7280;
- --accent:#2563eb;--ok:#16a34a;--soft:#f3f4f6;--warn:#d97706}
-body{background:var(--bg);color:var(--txt);
- font:15px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+:root{
+  --paper:#FAF9F6; --card:#fff; --line:#E7E5E4; --ink:#1C1917;
+  --dim:#78716C; --faint:#A8A29E; --accent:#B45309; --soft:#F3F1EC;
+  --serif:Georgia,"Songti SC","STSong","Noto Serif SC",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+}
+body{background:var(--paper);color:var(--ink);font:15px/1.7 var(--sans);
  -webkit-font-smoothing:antialiased}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-.wrap{max-width:1160px;margin:0 auto;padding:22px 20px 70px}
-header.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-header.top h1{font-size:20px;font-weight:700}
-header.top .sp{flex:1}
-.badge{background:var(--soft);color:var(--dim);border-radius:999px;padding:3px 11px;font-size:12.5px}
-.badge.nav-on{background:var(--accent);color:#fff}
-.grid{display:grid;gap:14px}
-.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
-.stat .k{font-size:12.5px;color:var(--dim);margin-bottom:6px}
-.stat .v{font-size:26px;font-weight:700;letter-spacing:-.5px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
-.card h2{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-input[type=search],select{font:inherit;padding:9px 13px;border:1px solid var(--line);
- border-radius:9px;background:var(--card);color:var(--txt);outline:none}
-input[type=search]{flex:1;min-width:220px}
-input[type=search]:focus,select:focus{border-color:var(--accent)}
-.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-.docs{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
-.doc{background:var(--card);border:1px solid var(--line);border-radius:11px;overflow:hidden;
- display:flex;flex-direction:column;transition:.14s}
-.doc:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.07)}
-.doc .cv{aspect-ratio:16/10;background:var(--soft);overflow:hidden;display:block}
-.doc .cv img{width:100%;height:100%;object-fit:cover;display:block}
-.doc .no{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;
- color:var(--dim);font-size:12.5px;background:var(--soft)}
-.doc .b{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
-.doc .au{font-size:11.5px;color:var(--dim)}
-.doc .ti{font-size:13.5px;font-weight:600;line-height:1.5;
- display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.doc .mt{display:flex;gap:7px;align-items:center;font-size:11.5px;color:var(--dim);margin-top:auto}
-.kw{background:var(--soft);border-radius:5px;padding:1px 6px;font-size:11px;color:var(--dim)}
-.authors{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(258px,1fr))}
-.author{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:block;color:inherit}
-.author:hover{border-color:var(--accent);text-decoration:none;box-shadow:0 5px 16px rgba(0,0,0,.06)}
-.author .n{font-size:15.5px;font-weight:700;margin-bottom:6px}
-.author .m{font-size:12.5px;color:var(--dim)}
-.author .avs{display:flex;gap:5px;margin-top:11px;flex-wrap:wrap}
-.author .avs img{width:44px;height:44px;object-fit:cover;border-radius:7px;border:1px solid var(--line)}
-.author .lk{font-size:12px;color:var(--accent);margin-top:10px;display:inline-block}
-.empty{text-align:center;color:var(--dim);padding:60px 20px}
-footer{color:var(--dim);font-size:12.5px;text-align:center;margin-top:44px;line-height:2}
-mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}
-</style></head><body><div class="wrap">
-<header class="top"><h1><a href="index.html" style="color:inherit">📚 抖音逐字稿库</a></h1><span class="sp"></span><a class="badge" href="index.html">📊 全部</a>
-<a class="badge" href="authors.html">👤 按主播</a>
-<a class="badge" href="index.html#kw">🔖 关键词</a></header>
+.wrap{max-width:1120px;margin:0 auto;padding:0 48px 40px}
 
-<div id="crumb" style="font-size:13px;color:var(--dim);margin-bottom:14px"></div>
-<article class="card" id="box" style="display:none">
-  <div style="display:flex;gap:20px;flex-wrap:wrap">
-    <a id="cv" style="flex:0 0 300px"><img id="cvi" style="width:100%;border-radius:10px;border:1px solid var(--line)"></a>
-    <div style="flex:1;min-width:260px">
-      <h1 id="ti" style="font-size:20px;line-height:1.5;margin-bottom:10px"></h1>
-      <div id="mt" style="color:var(--dim);font-size:13px;margin-bottom:12px"></div>
-      <div id="kws" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="badge" id="dl" download>⬇ 下载 md 原文</a>
-        <a class="badge" id="vd" target="_blank" rel="noopener">▶ 抖音原视频</a>
-        <a class="badge" id="hm" target="_blank" rel="noopener">👤 主播主页</a>
-        <a class="badge" id="nx" rel="noopener">→ 下一篇</a>
-      </div>
+header.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;height:76px;
+ border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;color:inherit}
+.brand:hover{text-decoration:none}
+.brand .mark{width:34px;height:34px;background:var(--accent);border-radius:8px;
+ display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.brand .nm{font:600 19px var(--serif);color:var(--ink);letter-spacing:.01em}
+header.top .sp{flex:1}
+nav.nav{display:flex;gap:26px;align-items:center}
+nav.nav a{font-size:14px;color:var(--dim);text-decoration:none}
+nav.nav a:hover{color:var(--ink);text-decoration:none}
+nav.nav a.on{color:var(--accent);font-weight:500}
+
+.crumb{font-size:13px;color:var(--dim);padding:20px 0 0}
+.crumb a{color:var(--accent)}
+
+.art-head{padding:26px 0 34px;border-bottom:1px solid var(--line);display:flex;gap:28px;flex-wrap:wrap}
+.ah-cv{flex:0 0 280px}
+.ah-cv img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
+.ah-info{flex:1;min-width:280px}
+.ah-info h1{font:700 27px/1.4 var(--serif);letter-spacing:-.01em;margin-bottom:12px}
+.ah-meta{color:var(--dim);font-size:14px;margin-bottom:14px}
+.kws{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.kw{background:var(--soft);border-radius:4px;padding:3px 10px;font-size:12px;color:var(--dim)}
+.kw:hover{background:#F5E6D3;color:var(--accent);text-decoration:none}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-block;padding:10px 16px;border:1px solid var(--line);border-radius:8px;
+ background:var(--card);color:var(--ink);font-size:14px;transition:.15s}
+.btn:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btn.primary:hover{background:#9A4708;border-color:#9A4708;color:#fff}
+
+.reader{max-width:720px;margin:0 auto;padding:34px 0 0}
+.sec{font:600 18px var(--serif);color:var(--ink);margin-bottom:16px;
+ display:flex;align-items:baseline;gap:8px}
+.cnt{font-size:12.5px;color:var(--faint);font-weight:400}
+#sm{font-size:15px;line-height:1.85}
+#sm h3{font:600 16.5px var(--serif);margin:20px 0 8px;color:var(--ink)}
+#sm h4{font:600 15px var(--sans);margin:14px 0 6px;color:var(--ink)}
+#sm li{margin:5px 0 5px 20px;display:list-item;list-style:disc}
+#sm p{color:var(--dim)}
+#tr{font-size:15.5px;line-height:2;white-space:pre-wrap;padding-bottom:20px}
+mark{background:#FDE9D3;color:inherit;padding:0 1px;border-radius:2px}
+.empty{text-align:center;color:var(--dim);padding:60px 20px;font-size:14px}
+footer{border-top:1px solid var(--line);color:var(--dim);font-size:13px;
+ padding:26px 0 30px;text-align:center;margin-top:40px}
+
+@media(max-width:640px){
+ .wrap{padding:0 20px 30px}
+ .ah-info h1{font-size:22px}
+ .ah-cv{flex:0 0 100%}
+ .reader{padding:26px 0 0}
+ nav.nav{gap:18px}
+}
+</style></head><body><div class="wrap">
+<header class="top">
+  <a class="brand" href="index.html">
+    <span class="mark"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 2.5C4.31 2.5 3.75 3.06 3.75 3.75V16.25C3.75 16.94 4.31 17.5 5 17.5H15C15.69 17.5 16.25 16.94 16.25 16.25V3.75C16.25 3.06 15.69 2.5 15 2.5H5Z" stroke="white" stroke-width="1.5"/><path d="M6.5 6.5H13.5M6.5 9.5H13.5M6.5 12.5H10" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+    <span class="nm">抖音逐字稿库</span>
+  </a>
+  <span class="sp"></span>
+  <nav class="nav">
+    <a href="index.html">全部</a>
+    <a href="authors.html">按主播</a>
+    <a href="index.html#kw">关键词</a>
+  </nav>
+</header>
+
+<div class="crumb" id="crumb"></div>
+
+<div class="art-head">
+  <span class="ah-cv" id="cv"><img id="cvi" alt=""></span>
+  <div class="ah-info">
+    <h1 id="ti"></h1>
+    <div class="ah-meta" id="mt"></div>
+    <div class="kws" id="kws"></div>
+    <div class="acts">
+      <a class="btn primary" id="dl" download>下载 md 原文</a>
+      <a class="btn" id="vd" target="_blank" rel="noopener">抖音原视频</a>
+      <a class="btn" id="hm" target="_blank" rel="noopener">主播主页</a>
+      <a class="btn" id="nx" rel="noopener">下一篇</a>
     </div>
   </div>
-  <h2 style="margin:26px 0 12px;font-size:16px;font-weight:700">内容总结 <span class="badge" id="sl"></span></h2>
-  <div id="sm" style="font-size:14.5px"></div>
-  <h2 style="margin:26px 0 12px;font-size:16px;font-weight:700">逐字稿 <span class="badge" id="tc"></span></h2>
-  <div id="tr" style="font-size:15px;white-space:pre-wrap;line-height:2"></div>
-</article>
-<div class="empty" id="none">未找到该逐字稿</div>
+</div>
+
+<div class="reader">
+  <h2 class="sec">内容总结 <span class="cnt" id="sl"></span></h2>
+  <div id="sm"></div>
+</div>
+
+<div class="reader">
+  <h2 class="sec">逐字稿 <span class="cnt" id="tc"></span></h2>
+  <div id="tr"></div>
+</div>
+
+<div class="empty" id="none" style="display:none">未找到该逐字稿</div>
+
+<footer>逐字稿由公开视频音频自动转写生成 · 仅供个人学习与内容研究 · 版权归原作者及平台所有</footer>
 
 <script>
-function fmtDur(s){
-  s = Math.round(s||0);
-  var h = Math.floor(s/3600), m = Math.floor(s%3600/60);
-  return h ? (h+' 小时 '+(m?m+' 分':'')) : (m+' 分');
-}
 function esc(s){return (s==null?'':String(s)).replace(/[&<>"']/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-function hl(text, kw){
-  if(!kw) return esc(text);
-  try{
-    var re = new RegExp('('+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
-    return esc(text).replace(re,'<mark>$1</mark>');
-  }catch(e){return esc(text);}
+function fmtChars(n){
+  n=Number(n)||0;
+  return n>=10000 ? (n/10000).toFixed(1)+'万' : String(n);
 }
-function coverHtml(d){
-  return d.cover
-    ? '<a class="cv" href="doc.html?id='+encodeURIComponent(d.id)+'"><img loading="lazy" src="'+d.cover+'" alt=""></a>'
-    : '<a class="no" href="doc.html?id='+encodeURIComponent(d.id)+'">无封面</a>';
-}
-function docHtml(d, kw){
-  return '<article class="doc">'+coverHtml(d)+
-   '<div class="b"><span class="au">'+esc(d.author)+' · '+esc(d.date)+'</span>'+
-   '<a class="ti" href="doc.html?id='+encodeURIComponent(d.id)+'">'+hl(d.title,kw)+'</a>'+
-   '<div class="mt"><span>'+fmtDur(d.chars/4.5)+'字</span>'+
-   (d.keywords&&d.keywords[0]?'<span class="kw">'+esc(d.keywords[0])+'</span>':'')+
-   '</div></div></article>';
-}
-
 function md2html(s){
   return esc(s)
-    .replace(/^### (.+)$/gm, '<h4 style="font-size:14.5px;margin:16px 0 8px">$1</h4>')
-    .replace(/^## (.+)$/gm, '<h3 style="font-size:15.5px;margin:20px 0 10px">$1</h3>')
-    .replace(/^- (.+)$/gm, '<li style="margin:5px 0 5px 18px">$1</li>');
+    .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>');
 }
 function $(id){return document.getElementById(id);}
 
-var mm = location.search.match(/[?&]id=([^&]+)/);
-if (!mm) { $('none').textContent = '缺少 id 参数'; }
+var mm=location.search.match(/[?&]id=([^&]+)/);
+if(!mm){ $('none').textContent='缺少 id 参数'; $('none').style.display=''; }
 else {
-  var wantId = decodeURIComponent(mm[1]);
-  // 第一步：只等索引（≈0.8MB），先把标题/封面/链接/摘要首句画出来
+  var wantId=decodeURIComponent(mm[1]);
   fetch('data/index.json').then(function(r){return r.json();}).then(function(d){
-    var doc = null;
-    for (var j = 0; j < d.docsList.length; j++){
-      if (d.docsList[j].id === wantId){ doc = d.docsList[j]; break; }
-    }
-    if (!doc){ $('none').textContent = '未找到该逐字稿'; return; }
-    var i = d.docsList.indexOf(doc);
-    document.title = doc.title + ' · 抖音逐字稿库';
-    $('crumb').innerHTML =
-      '<a href="index.html">全部</a> › <a href="index.html?au='+encodeURIComponent(doc.author)+'">'+esc(doc.author)+'</a>';
-    $('ti').textContent = doc.title;
-    $('mt').textContent = doc.author + ' · ' + doc.date + ' · ' + doc.chars + ' 字';
-    $('kws').innerHTML = (doc.keywords||[]).map(function(k){
+    var doc=null;
+    for(var j=0;j<d.docsList.length;j++){ if(d.docsList[j].id===wantId){ doc=d.docsList[j]; break; } }
+    if(!doc){ $('none').textContent='未找到该逐字稿'; $('none').style.display=''; return; }
+    var i=d.docsList.indexOf(doc);
+    document.title=doc.title+' · 抖音逐字稿库';
+    $('crumb').innerHTML='<a href="index.html">全部</a> › <a href="index.html?au='+
+      encodeURIComponent(doc.author)+'">'+esc(doc.author)+'</a>';
+    $('ti').textContent=doc.title;
+    $('mt').textContent=doc.author+' · '+doc.date+' · 约 '+fmtChars(doc.chars)+' 字';
+    $('kws').innerHTML=(doc.keywords||[]).map(function(k){
       return '<a class="kw" href="index.html?kw='+encodeURIComponent(k)+'">'+esc(k)+'</a>';
     }).join('');
-    if (doc.cover) { $('cvi').src = doc.cover; }
-    else { $('cv').style.display = 'none'; }
-    $('dl').href = 'transcripts/' + doc.id + '.md';
-    var vd = $('vd'); if (doc.videoUrl) vd.href = doc.videoUrl; else vd.style.display = 'none';
-    var hm = $('hm'); if (doc.homeUrl) hm.href = doc.homeUrl; else hm.style.display = 'none';
-    var nx = $('nx');
-    var prev = d.docsList[i-1];
-    nx.href = prev ? 'doc.html?id=' + encodeURIComponent(prev.id) : 'index.html';
-    nx.textContent = prev ? '→ ' + prev.title.slice(0,14) : '→ 回到列表';
-    $('tc').textContent = doc.chars + ' 字';
-    $('sl').textContent = '加载中…';
-    if (doc.snippet) $('sm').innerHTML = '<p style="color:var(--dim)">' + hl(doc.snippet, '') + '</p>';
-    $('tr').textContent = '正文加载中…';
-    $('box').style.display = '';
-    $('none').style.display = 'none';
-    window.scrollTo(0, 0);
-    // 第二步：只拉这一篇的正文分片（≈17KB）
-    fetch('data/docs/' + doc.id + '.json').then(function(r){ return r.json(); }).then(function(x){
-      $('sl').textContent = '';
-      $('sm').innerHTML = md2html(x.summary || '');
-      $('tr').textContent = x.transcript || '（无逐字稿）';
+    if(doc.cover){ $('cvi').src=doc.cover; }
+    else { $('cv').style.display='none'; }
+    $('dl').href='transcripts/'+doc.id+'.md';
+    var vd=$('vd'); if(doc.videoUrl) vd.href=doc.videoUrl; else vd.style.display='none';
+    var hm=$('hm'); if(doc.homeUrl) hm.href=doc.homeUrl; else hm.style.display='none';
+    var nx=$('nx');
+    var prev=d.docsList[i-1];
+    nx.href=prev ? 'doc.html?id='+encodeURIComponent(prev.id) : 'index.html';
+    nx.textContent=prev ? '下一篇：'+prev.title.slice(0,16) : '回到列表';
+    $('tc').textContent='约 '+fmtChars(doc.chars)+' 字';
+    $('sl').textContent='加载中…';
+    if(doc.snippet) $('sm').innerHTML='<p>'+esc(doc.snippet)+'</p>';
+    $('tr').textContent='正文加载中…';
+    $('none').style.display='none';
+    window.scrollTo(0,0);
+    fetch('data/docs/'+doc.id+'.json').then(function(r){return r.json();}).then(function(x){
+      $('sl').textContent='';
+      $('sm').innerHTML=md2html(x.summary||'');
+      $('tr').textContent=x.transcript||'（无逐字稿）';
     }).catch(function(){
-      $('sl').textContent = '';
-      $('tr').innerHTML = '<span style="color:var(--dim)">正文加载失败，可点上方「下载 md 原文」。</span>';
+      $('sl').textContent='';
+      $('tr').innerHTML='<span style="color:var(--dim)">正文加载失败，可点上方「下载 md 原文」。</span>';
     });
   }).catch(function(e){
-    $('none').style.display = '';
-    $('none').textContent = '索引加载失败：' + e;
+    $('none').style.display='';
+    $('none').textContent='索引加载失败：'+e;
   });
 }
 </script></div></body></html>
