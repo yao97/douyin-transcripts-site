@@ -6,7 +6,9 @@
 
 ## 在线浏览
 
-**https://yao97.github.io/douyin-transcripts-site/**
+**workbuddy 发布**：https://douyin-transcripts.app.workbuddy.host/
+
+**GitHub Pages**：https://yao97.github.io/douyin-transcripts-site/ （需先按下方「启用 GitHub Pages」开启一次）
 
 | 页面 | 说明 |
 |---|---|
@@ -82,7 +84,16 @@ python build_site.py --covers
 
 ## 启用 GitHub Pages
 
-仓库已配置 Pages；如需手动开启：��定仓库 → **Settings → Pages** → Source 选 `main` 分支、根目录 `/ (root)`。
+部署由 `.github/workflows/pages.yml` 自动完成，**首次需要手动开启一次**：
+
+1. 仓库 → **Settings** → 左侧 **Pages**
+2. **Build and deployment → Source** 选 **GitHub Actions**（不是 `Deploy from a branch`）
+3. 保存后无需再操作 —— 之后每次 push 到 `main` 会自动重新部署
+
+也可以在 Actions 页面点 **Deploy to GitHub Pages → Run workflow** 手动触发首次部署。
+
+> 若在开启 Source 之前就推送过，会看到 `Setup Pages` 步骤失败（Pages 尚未启用），
+> 开启 Source 后重新 Run workflow 即可，与代码内容无关。
 
 ## 声明
 
