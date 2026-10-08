@@ -1,0 +1,11 @@
+# 逐字稿与页面统一用 LF，避免 CRLF 污染 Pages 渲染与体积
+* text=auto eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.py text eol=lf
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
