@@ -42,16 +42,31 @@
 douyin-transcripts-site/
 ├── index.html              # 首页（列表 + 搜索 + 筛选）
 ├── authors.html            # 按主播浏览
-├── doc.html                # 单篇阅读壳（数据从 JSON 取）
+├── doc.html                # 单篇阅读壳
 ├── data/
-│   └── transcripts.json    # 全量元数据 + 摘要 + 逐字稿（前端唯一数据源）
-├── transcripts/<作者>/*.md # 逐字稿原文（与 data 中的 id 对应，可直接下载）
+│   ├── index.json          # 索引 1.13MB —— 元数据 + 摘要首句，首屏只下这个
+│   └── docs/<作者>/<id>.json  # 正文分片 ≈11KB/篇 —— summary + transcript，按需拉
+├── transcripts/<作者>/*.md # 逐字稿原文（可直接下载）
 ├── assets/covers/<作者>/*.jpg  # 封面（已缩至宽 720px / JPEG q82）
 ├── build_site.py           # 构建脚本
 └── .nojekyll               # 让 GitHub Pages 不过滤下划线目录
 ```
 
-`data/transcripts.json` 体积较大（**全量正文**），首屏加载约 10~20MB。所有列表渲染、搜索、筛选均在浏览器端完成，服务端零请求。
+### 为什么拆成两层
+
+GitHub Pages **不开启 gzip**（响应无 `Content-Encoding`），缓存也只有 `max-age=600`。
+早期把所有正文塞进一个 `transcripts.json`（22.2MB），实测从 GitHub 拉完要 **141 秒**，
+每次刷新都要重来一遍，站点基本不可用。
+
+拆成「索引 + 分片」后：
+
+| | 体积 | 实测耗时 |
+|---|---|---|
+| 首屏 `index.json` | 1.13 MB | **5 秒** |
+| 单篇正文分片 | ≈11 KB | 0.9 秒 |
+
+搜索也相应改成两层：标题/主播/关键词/摘要首句在索引里**即时过滤**；
+正文走分片**串行懒加载**（每批 12 个），命中数边扫边加，标题栏显示「正文中…」。
 
 ## 数据来源与流水线
 
