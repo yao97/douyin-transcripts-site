@@ -91,7 +91,7 @@ function docHtml(d, kw){
    '</div></div></article>';
 }
 
-fetch('data/transcripts.json').then(function(r){return r.json();}).then(function(d){
+fetch('data/index.json').then(function(r){return r.json();}).then(function(d){
   document.getElementById('grid').innerHTML = d.authorList.map(function(a){
     var avs = (a.covers||[]).slice(0,5).map(function(c){
       return '<img loading="lazy" src="'+c+'" alt="">';

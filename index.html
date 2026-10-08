@@ -65,7 +65,7 @@ mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}
 </div>
 
 <div class="tools" style="margin-top:18px">
-  <input type="search" id="q" placeholder="🔍 搜索标题 / 摘要 / 逐字稿 / 主播 / 关键词…" autocomplete="off">
+  <input type="search" id="q" placeholder="🔍 搜索标题 / 主播 / 关键词（正文会继续深搜，命中数实时增加）" autocomplete="off">
   <select id="au"><option value="">全部主播</option></select>
   <select id="kw"><option value="">全部关键词</option></select>
   <select id="so">
@@ -110,56 +110,103 @@ function docHtml(d, kw){
    '</div></div></article>';
 }
 
-var DATA = null, LIST = [], q='', au='', kw='';
-fetch('data/transcripts.json').then(function(r){return r.json();}).then(function(d){
-  DATA = d; LIST = d.docs;
-  var auSel = document.getElementById('au');
+var DATA = null, LIST = [], q='', au='', kw='', bodyHits=null, scanning=false;
+var $ = function(id){return document.getElementById(id);};
+
+fetch('data/index.json').then(function(r){return r.json();}).then(function(d){
+  DATA = d; LIST = d.docsList;
+  var auSel = $('au');
   d.authorList.forEach(function(a){
     var o = document.createElement('option'); o.value = a.name; o.textContent = a.name + ' (' + a.docs + ')';
     auSel.appendChild(o);
   });
-  var kwSel = document.getElementById('kw');
+  var kwSel = $('kw');
   d.keywords.slice(0, 400).forEach(function(k){
     var o = document.createElement('option'); o.value = k; o.textContent = k;
     kwSel.appendChild(o);
   });
+  // 预填筛选参数：?au=xxx / ?kw=xxx（authors.html 跳转过来）
+  var m = location.search.match(/[?&]au=([^&]+)/);
+  if (m){ au = decodeURIComponent(m[1]); auSel.value = au; }
+  m = location.search.match(/[?&]kw=([^&]+)/);
+  if (m){ kw = decodeURIComponent(m[1]); kwSel.value = kw; }
   bind(); render();
+}).catch(function(e){
+  $('none').style.display = '';
+  $('none').textContent = '索引加载失败：' + e;
 });
+
 function bind(){
   var t;
-  document.getElementById('q').addEventListener('input', function(){
+  $('q').addEventListener('input', function(){
     clearTimeout(t); var v = this.value.trim();
-    t = setTimeout(function(){ q = v.toLowerCase(); render(); }, 160);
+    t = setTimeout(function(){ q = v.toLowerCase(); bodyHits = null; render(); scanBody(); }, 200);
   });
-  document.getElementById('au').addEventListener('change', function(){ au = this.value; render(); });
-  document.getElementById('kw').addEventListener('change', function(){ kw = this.value; render(); });
-  document.getElementById('so').addEventListener('change', render);
-  if (location.hash === '#kw') document.getElementById('kw').focus();
+  $('au').addEventListener('change', function(){ au = this.value; bodyHits = null; render(); scanBody(); });
+  $('kw').addEventListener('change', function(){ kw = this.value; bodyHits = null; render(); scanBody(); });
+  $('so').addEventListener('change', render);
+  if (location.hash === '#kw') $('kw').focus();
 }
-function match(d){
+
+// 元数据层：即时命中（标题/主播/关键词/摘要首句），不碰正文
+function matchMeta(d){
   if (au && d.author !== au) return false;
   if (kw && (d.keywords||[]).indexOf(kw) < 0) return false;
   if (!q) return true;
   if (d.title.toLowerCase().indexOf(q) >= 0) return true;
   if (d.author.toLowerCase().indexOf(q) >= 0) return true;
   if ((d.keywords||[]).some(function(k){return k.toLowerCase().indexOf(q) >= 0;})) return true;
-  if (d.summary && d.summary.toLowerCase().indexOf(q) >= 0) return true;
-  if (d.transcript && d.transcript.toLowerCase().indexOf(q) >= 0) return true;
+  if (d.snippet && d.snippet.toLowerCase().indexOf(q) >= 0) return true;
   return false;
 }
+
+// 正文层：按需拉分片。串行 + 限流，避免一次打 1200 个请求。
+var scanList = null, scanTimer = null;
+function scanBody(){
+  if (!q) { bodyHits = null; return; }
+  scanList = LIST.filter(function(d){
+    return (!au || d.author === au) && (!kw || (d.keywords||[]).indexOf(kw) >= 0);
+  });
+  scanning = true;
+  clearTimeout(scanTimer);
+  scanStep();
+}
+var CHUNK = 12;
+function scanStep(){
+  if (!scanning || !scanList || !scanList.length) { scanning = false; return; }
+  var batch = scanList.splice(0, CHUNK);
+  Promise.all(batch.map(function(d){
+    return fetch('data/docs/' + d.id + '.json')
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(x){
+        if (!x) return;
+        if (x.summary && x.summary.toLowerCase().indexOf(q) >= 0) { bodyHits = bodyHits || {}; bodyHits[d.id] = 'summary'; }
+        else if (x.transcript && x.transcript.toLowerCase().indexOf(q) >= 0) { bodyHits = bodyHits || {}; bodyHits[d.id] = 'transcript'; }
+      })
+      .catch(function(){});
+  })).then(function(){
+    render();
+    scanStep();
+  });
+}
+
+function match(d){
+  if (!matchMeta(d)) return false;
+  if (q && bodyHits && !bodyHits[d.id]) return false;
+  return true;
+}
 function render(){
-  var so = document.getElementById('so').value;
+  var so = $('so').value;
   var out = LIST.filter(match);
   out.sort(function(a,b){
     if (so === 'chars') return b.chars - a.chars;
     if (so === 'title') return a.title.localeCompare(b.title,'zh');
     return (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
   });
-  var box = document.getElementById('list');
-  document.getElementById('cnt').textContent = out.length + ' 篇';
-  document.getElementById('none').style.display = out.length ? 'none' : '';
-  var kwh = q;
-  box.innerHTML = out.slice(0, 600).map(function(d){return docHtml(d, kwh);}).join('');
+  var box = $('list');
+  $('cnt').textContent = out.length + ' 篇' + (scanning ? '（正文中…）' : '');
+  $('none').style.display = out.length ? 'none' : '';
+  box.innerHTML = out.slice(0, 600).map(function(d){return docHtml(d, q);}).join('');
   if (out.length > 600) {
     var n = document.createElement('div');
     n.className = 'empty'; n.textContent = '仅显示前 600 篇，请继续输入关键词缩小范围';

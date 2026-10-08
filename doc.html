@@ -73,7 +73,7 @@ mark{background:#fff3a3;color:inherit;padding:0 1px;border-radius:2px}
       </div>
     </div>
   </div>
-  <h2 style="margin:26px 0 12px;font-size:16px;font-weight:700">内容总结</h2>
+  <h2 style="margin:26px 0 12px;font-size:16px;font-weight:700">内容总结 <span class="badge" id="sl"></span></h2>
   <div id="sm" style="font-size:14.5px"></div>
   <h2 style="margin:26px 0 12px;font-size:16px;font-weight:700">逐字稿 <span class="badge" id="tc"></span></h2>
   <div id="tr" style="font-size:15px;white-space:pre-wrap;line-height:2"></div>
@@ -115,40 +115,56 @@ function md2html(s){
     .replace(/^## (.+)$/gm, '<h3 style="font-size:15.5px;margin:20px 0 10px">$1</h3>')
     .replace(/^- (.+)$/gm, '<li style="margin:5px 0 5px 18px">$1</li>');
 }
-fetch('data/transcripts.json').then(function(r){return r.json();}).then(function(d){
-  var m = location.search.match(/[?&]id=([^&]+)/);
-  if (!m) return;
-  var id = decodeURIComponent(m[1]);
-  var i = d.docs.findIndex(function(x){return x.id === id;});
-  if (i < 0) return;
-  var doc = d.docs[i];
-  document.title = doc.title + ' · 抖音逐字稿库';
-  document.getElementById('crumb').innerHTML =
-    '<a href="index.html">全部</a> › <a href="index.html?au='+encodeURIComponent(doc.author)+'">'+esc(doc.author)+'</a>';
-  document.getElementById('ti').textContent = doc.title;
-  document.getElementById('mt').textContent = doc.author + ' · ' + doc.date + ' · ' + doc.chars + ' 字';
-  document.getElementById('kws').innerHTML = (doc.keywords||[]).map(function(k){
-    return '<a class="kw" href="index.html?kw='+encodeURIComponent(k)+'">'+esc(k)+'</a>';
-  }).join('');
-  if (doc.cover) {
-    document.getElementById('cvi').src = doc.cover;
-  } else {
-    document.getElementById('cv').style.display = 'none';
-  }
-  document.getElementById('dl').href = 'transcripts/' + doc.id + '.md';
-  var vd = document.getElementById('vd');
-  if (doc.videoUrl) vd.href = doc.videoUrl; else vd.style.display = 'none';
-  var hm = document.getElementById('hm');
-  if (doc.homeUrl) hm.href = doc.homeUrl; else hm.style.display = 'none';
-  var nx = document.getElementById('nx');
-  var prev = d.docs[i-1], next = d.docs[i+1];
-  nx.href = prev ? 'doc.html?id=' + encodeURIComponent(prev.id) : 'index.html';
-  nx.textContent = prev ? '→ ' + prev.title.slice(0,14) : '→ 回到列表';
-  document.getElementById('sm').innerHTML = md2html(doc.summary);
-  document.getElementById('tr').textContent = doc.transcript || '（无逐字稿）';
-  document.getElementById('tc').textContent = doc.chars + ' 字';
-  document.getElementById('box').style.display = '';
-  document.getElementById('none').style.display = 'none';
-  window.scrollTo(0, 0);
-});
+function $(id){return document.getElementById(id);}
+
+var mm = location.search.match(/[?&]id=([^&]+)/);
+if (!mm) { $('none').textContent = '缺少 id 参数'; }
+else {
+  var wantId = decodeURIComponent(mm[1]);
+  // 第一步：只等索引（≈0.8MB），先把标题/封面/链接/摘要首句画出来
+  fetch('data/index.json').then(function(r){return r.json();}).then(function(d){
+    var doc = null;
+    for (var j = 0; j < d.docsList.length; j++){
+      if (d.docsList[j].id === wantId){ doc = d.docsList[j]; break; }
+    }
+    if (!doc){ $('none').textContent = '未找到该逐字稿'; return; }
+    var i = d.docsList.indexOf(doc);
+    document.title = doc.title + ' · 抖音逐字稿库';
+    $('crumb').innerHTML =
+      '<a href="index.html">全部</a> › <a href="index.html?au='+encodeURIComponent(doc.author)+'">'+esc(doc.author)+'</a>';
+    $('ti').textContent = doc.title;
+    $('mt').textContent = doc.author + ' · ' + doc.date + ' · ' + doc.chars + ' 字';
+    $('kws').innerHTML = (doc.keywords||[]).map(function(k){
+      return '<a class="kw" href="index.html?kw='+encodeURIComponent(k)+'">'+esc(k)+'</a>';
+    }).join('');
+    if (doc.cover) { $('cvi').src = doc.cover; }
+    else { $('cv').style.display = 'none'; }
+    $('dl').href = 'transcripts/' + doc.id + '.md';
+    var vd = $('vd'); if (doc.videoUrl) vd.href = doc.videoUrl; else vd.style.display = 'none';
+    var hm = $('hm'); if (doc.homeUrl) hm.href = doc.homeUrl; else hm.style.display = 'none';
+    var nx = $('nx');
+    var prev = d.docsList[i-1];
+    nx.href = prev ? 'doc.html?id=' + encodeURIComponent(prev.id) : 'index.html';
+    nx.textContent = prev ? '→ ' + prev.title.slice(0,14) : '→ 回到列表';
+    $('tc').textContent = doc.chars + ' 字';
+    $('sl').textContent = '加载中…';
+    if (doc.snippet) $('sm').innerHTML = '<p style="color:var(--dim)">' + hl(doc.snippet, '') + '</p>';
+    $('tr').textContent = '正文加载中…';
+    $('box').style.display = '';
+    $('none').style.display = 'none';
+    window.scrollTo(0, 0);
+    // 第二步：只拉这一篇的正文分片（≈17KB）
+    fetch('data/docs/' + doc.id + '.json').then(function(r){ return r.json(); }).then(function(x){
+      $('sl').textContent = '';
+      $('sm').innerHTML = md2html(x.summary || '');
+      $('tr').textContent = x.transcript || '（无逐字稿）';
+    }).catch(function(){
+      $('sl').textContent = '';
+      $('tr').innerHTML = '<span style="color:var(--dim)">正文加载失败，可点上方「下载 md 原文」。</span>';
+    });
+  }).catch(function(e){
+    $('none').style.display = '';
+    $('none').textContent = '索引加载失败：' + e;
+  });
+}
 </script></div></body></html>
